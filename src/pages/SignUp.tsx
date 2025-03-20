@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 
@@ -52,9 +53,11 @@ export default function SignUp() {
           />
 
           {/* Sign Up Button */}
-          <button className="w-full bg-red-500 text-white py-3 rounded font-bold hover:bg-red-600">
-            Sign up
-          </button>
+          <Link to="/dashboard" className="w-full">
+            <button className="w-full bg-red-500 text-white py-3 rounded font-bold hover:bg-red-600">
+              Sign up
+            </button>
+          </Link>
         </div>
 
         {/* Already have an account */}
@@ -75,15 +78,19 @@ export default function SignUp() {
         {/* Sign Up with Google & Facebook */}
         <div className="flex flex-col space-y-3 w-80">
           {/* Google */}
-          <button className="flex items-center justify-center border border-gray-300 rounded py-2 hover:bg-gray-100">
-            <FaGoogle className="text-red-500 text-xl mr-2" />
-            <span className="font-semibold">Sign up with Google</span>
-          </button>
+          <Link to="/oauth/google" className="w-full">
+            <button className="w-full flex items-center justify-center border border-gray-300 rounded py-2 hover:bg-gray-100">
+              <FaGoogle className="text-red-500 text-xl mr-2" />
+              <span className="font-semibold">Sign up with Google</span>
+            </button>
+          </Link>
           {/* Facebook */}
-          <button className="flex items-center justify-center border border-gray-300 rounded py-2 hover:bg-gray-100">
-            <FaFacebook className="text-blue-600 text-xl mr-2" />
-            <span className="font-semibold">Sign up with Facebook</span>
-          </button>
+          <Link to="/oauth/facebook" className="w-full">
+            <button className="w-full flex items-center justify-center border border-gray-300 rounded py-2 hover:bg-gray-100">
+              <FaFacebook className="text-blue-600 text-xl mr-2" />
+              <span className="font-semibold">Sign up with Facebook</span>
+            </button>
+          </Link>
         </div>
       </div>
     </div>

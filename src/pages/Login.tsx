@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 
 export default function Login() {
@@ -54,27 +55,33 @@ export default function Login() {
 
         {/* Forgot Password */}
         <div className="w-80 text-right text-sm mb-4 text-black cursor-pointer">
-          Forgot password??
+          <Link to="/forgot-password">Forgot password??</Link>
         </div>
 
         {/* Continue Button */}
-        <button className="w-80 bg-red-500 text-white py-3 rounded font-bold hover:bg-red-600 mb-4">
-          Continue
-        </button>
+        <Link to="/dashboard">
+          <button className="w-80 bg-red-500 text-white py-3 rounded font-bold hover:bg-red-600 mb-4">
+            Continue
+          </button>
+        </Link>
 
         {/* Sign in with */}
         <p className="text-sm text-gray-600 mb-2">Sign in with</p>
         <div className="flex space-x-6 mb-4">
-          <FaFacebook className="text-blue-600 text-2xl cursor-pointer" />
-          <FaGoogle className="text-red-500 text-2xl cursor-pointer" />
+          <Link to="/oauth/facebook">
+            <FaFacebook className="text-blue-600 text-2xl cursor-pointer" />
+          </Link>
+          <Link to="/oauth/google">
+            <FaGoogle className="text-red-500 text-2xl cursor-pointer" />
+          </Link>
         </div>
 
         {/* Don't have an account?? */}
         <p className="text-sm">
           Don’t have an account??
-          <span className="text-red-500 font-bold ml-1 cursor-pointer">
+          <Link to="/signup" className="text-red-500 font-bold ml-1 cursor-pointer">
             Sign up
-          </span>
+          </Link>
         </p>
       </div>
     </div>
