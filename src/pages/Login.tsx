@@ -1,23 +1,22 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import image from "../assets/pnwin.png"
 
 export default function Login() {
   const [activeTab, setActiveTab] = useState("mobile");
 
   return (
-    <div className="flex w-screen h-screen bg-white">
-      {/* LEFT SIDE: Big Red Circle */}
-      <div className="relative w-1/3 h-full overflow-hidden">
-        <div className="absolute w-[200%] h-[200%] bg-red-500 rounded-full -top-1/2 -left-1/2" />
+    <>
+    <div>
+      <div className="fixed -top-0 w-1/2 h-full overflow-hidden -left-80">
+        <div className="absolute w-[590px] h-[590px] border-[115px] border-red-500 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent" />
       </div>
-
-      {/* RIGHT SIDE: Login Form */}
-      <div className="flex-1 flex flex-col justify-center items-center">
-        {/* Heading */}
+    <div className="fixed bg-white left-130 top-20">
+      <div className="flex flex-col justify-center items-center">
         <h2 className="text-xl font-bold mb-6">Login your account!</h2>
 
-        {/* Tabs: E-mail / Mobile Number */}
         <div className="flex space-x-8 mb-6">
           <button
             onClick={() => setActiveTab("email")}
@@ -55,35 +54,32 @@ export default function Login() {
 
         {/* Forgot Password */}
         <div className="w-80 text-right text-sm mb-4 text-black cursor-pointer">
-          <Link to="/forgot-password">Forgot password??</Link>
+          Forgot password??
         </div>
+        </Link>
 
         {/* Continue Button */}
-        <Link to="/dashboard">
-          <button className="w-80 bg-red-500 text-white py-3 rounded font-bold hover:bg-red-600 mb-4">
-            Continue
-          </button>
-        </Link>
+        <button className="w-80 bg-red-500 text-white py-3 rounded font-bold hover:bg-red-600 mb-4">
+          Continue
+        </button>
 
         {/* Sign in with */}
         <p className="text-sm text-gray-600 mb-2">Sign in with</p>
         <div className="flex space-x-6 mb-4">
-          <Link to="/oauth/facebook">
-            <FaFacebook className="text-blue-600 text-2xl cursor-pointer" />
-          </Link>
-          <Link to="/oauth/google">
-            <FaGoogle className="text-red-500 text-2xl cursor-pointer" />
-          </Link>
+          <FaFacebook className="text-blue-600 text-2xl cursor-pointer" />
+          <FaGoogle className="text-red-500 text-2xl cursor-pointer" />
         </div>
 
         {/* Don't have an account?? */}
         <p className="text-sm">
           Don’t have an account??
-          <Link to="/signup" className="text-red-500 font-bold ml-1 cursor-pointer">
+          <span className="text-red-500 font-bold ml-1 cursor-pointer">
             Sign up
-          </Link>
+          </span>
         </p>
       </div>
     </div>
+    </div>
+    </>
   );
 }

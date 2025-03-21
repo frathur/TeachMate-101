@@ -1,94 +1,136 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { IconEye, IconEyeOff } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
 
 export default function SignUp() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState(0);
+
+  const calculatePasswordStrength = (pwd) => {
+    let strength = 0;
+    if (pwd.length >= 8) strength += 1;
+    if (/[A-Z]/.test(pwd)) strength += 1;
+    if (/[0-9]/.test(pwd)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(pwd)) strength += 1;
+    return strength;
+  };
+
+  useEffect(() => {
+    setIsError(confirmPassword !== "" && password !== confirmPassword);
+    setPasswordStrength(calculatePasswordStrength(password));
+  }, [password, confirmPassword]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    setTimeout(() => {
+      if (!isError && passwordStrength >= 3) {
+        setSuccessMessage("Account successfully created!");
+        setTimeout(() => {
+          setPassword("");
+          setConfirmPassword("");
+          setSuccessMessage("");
+        }, 2000);
+      }
+      setIsSubmitting(false);
+    }, 1000);
+  };
+
   return (
     <div className="flex w-screen h-screen bg-white">
-      {/* LEFT SIDE: Big Red Circle */}
+      {/* Left Side - Red Circle */}
       <div className="relative w-1/3 h-full overflow-hidden">
         <div className="absolute w-[200%] h-[200%] bg-red-500 rounded-full -top-1/2 -left-1/2" />
       </div>
 
-      {/* RIGHT SIDE: Sign-Up Form */}
+      {/* Right Side - Form */}
       <div className="flex-1 flex flex-col justify-center items-center">
-        {/* Heading */}
-        <h2 className="text-xl font-bold mb-6">Create an account!</h2>
-
-        {/* FORM */}
-        <div className="w-80">
-          {/* First & Surname in one row */}
-          <div className="flex space-x-2 mb-4">
-            <input
-              type="text"
-              placeholder="First Name"
-              className="w-1/2 p-3 border border-gray-300 rounded focus:outline-none"
-            />
-            <input
-              type="text"
-              placeholder="Surname"
-              className="w-1/2 p-3 border border-gray-300 rounded focus:outline-none"
-            />
+        <h2 className="text-xl font-bold mb-6">Create an Account</h2>
+        <form onSubmit={handleSubmit} className="w-80 space-y-4">
+          <div className="flex space-x-2">
+            <input type="text" placeholder="First Name" className="w-1/2 p-3 border rounded" required />
+            <input type="text" placeholder="Surname" className="w-1/2 p-3 border rounded" required />
           </div>
-
-          {/* Mobile Number */}
-          <input
-            type="text"
-            placeholder="Mobile Number"
-            className="w-full mb-4 p-3 border border-gray-300 rounded focus:outline-none"
-          />
-
-          {/* Email */}
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full mb-4 p-3 border border-gray-300 rounded focus:outline-none"
-          />
+          <input type="tel" placeholder="Mobile Number" className="w-full p-3 border rounded" required />
+          <input type="email" placeholder="Email" className="w-full p-3 border rounded" required />
 
           {/* Password */}
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full mb-6 p-3 border border-gray-300 rounded focus:outline-none"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              className="w-full p-3 border rounded"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span
+              className="absolute right-3 top-3 cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <IconEyeOff /> : <IconEye />}
+            </span>
+          </div>
 
-          {/* Sign Up Button */}
-          <Link to="/dashboard" className="w-full">
-            <button className="w-full bg-red-500 text-white py-3 rounded font-bold hover:bg-red-600">
-              Sign up
-            </button>
-          </Link>
-        </div>
+          {/* Confirm Password */}
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Confirm Password"
+              className="w-full p-3 border rounded"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <span
+              className="absolute right-3 top-3 cursor-pointer"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? <IconEyeOff /> : <IconEye />}
+            </span>
+          </div>
+          {isError && <p className="text-red-500 text-sm">Passwords do not match!</p>}
 
-        {/* Already have an account */}
+          <button
+            type="submit"
+            className="w-full bg-red-500 text-white py-3 rounded font-bold hover:bg-red-600"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Signing up..." : "Sign Up"}
+          </button>
+        </form>
+        {successMessage && <p className="text-green-500 text-center mt-4">{successMessage}</p>}
+
         <p className="mt-4 text-sm">
-          Already have an account?{" "}
-          <Link to="/login" className="text-red-500 font-bold cursor-pointer">
-            Login
-          </Link>
+          Already have an account? <Link to="/login" className="text-red-500 font-bold">Login</Link>
         </p>
 
-        {/* Divider with "or" */}
         <div className="flex items-center w-80 mt-6 mb-4">
           <div className="flex-1 h-px bg-gray-300" />
           <span className="mx-2 text-gray-500">or</span>
           <div className="flex-1 h-px bg-gray-300" />
         </div>
 
-        {/* Sign Up with Google & Facebook */}
+        {/* Social Sign Up */}
         <div className="flex flex-col space-y-3 w-80">
-          {/* Google */}
-          <Link to="/oauth/google" className="w-full">
-            <button className="w-full flex items-center justify-center border border-gray-300 rounded py-2 hover:bg-gray-100">
+          <Link to="/oauth/google">
+            <button className="w-full flex items-center justify-center border rounded py-2 hover:bg-gray-100">
               <FaGoogle className="text-red-500 text-xl mr-2" />
-              <span className="font-semibold">Sign up with Google</span>
+              Sign up with Google
             </button>
           </Link>
-          {/* Facebook */}
-          <Link to="/oauth/facebook" className="w-full">
-            <button className="w-full flex items-center justify-center border border-gray-300 rounded py-2 hover:bg-gray-100">
+          <Link to="/oauth/facebook">
+            <button className="w-full flex items-center justify-center border rounded py-2 hover:bg-gray-100">
               <FaFacebook className="text-blue-600 text-xl mr-2" />
-              <span className="font-semibold">Sign up with Facebook</span>
+              Sign up with Facebook
             </button>
           </Link>
         </div>
