@@ -15,26 +15,17 @@ import NewChat from './pages/NewChat';
 import YourMaterials from './pages/YourMaterials';
 import YourStudent from './pages/YourStudent';
 import Settings from './pages/Settings';
+import Forgotpassword from './pages/Forgotpassword';
+import Navbar from './pages/Navbar';
+import Footer from './pages/footer';
 
-// Layout component with a header and footer.
+
 const Layout: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header with navigation links */}
-      <header className="p-4 bg-gray-100 shadow">
+    <div className="max-h-screen flex flex-col">
+      
+      {/* <header className="p-4 bg-gray-100 shadow">
         <nav className="flex justify-center space-x-6">
-          <Link to="/" className="text-gray-700 hover:text-black">
-            Landing
-          </Link>
-          <Link to="/login" className="text-gray-700 hover:text-black">
-            Login
-          </Link>
-          <Link to="/signup" className="text-gray-700 hover:text-black">
-            Sign Up
-          </Link>
-          <Link to="/about" className="text-gray-700 hover:text-black">
-            About
-          </Link>
           <Link to="/newchat" className="text-gray-700 hover:text-black">
             New Chat
           </Link>
@@ -48,17 +39,13 @@ const Layout: React.FC = () => {
             Settings
           </Link>
         </nav>
-      </header>
+      </header> */}
 
       {/* Main content is rendered here */}
       <main className="flex-1 p-4">
         <Outlet />
       </main>
 
-      {/* Footer */}
-      <footer className="p-4 bg-gray-100 text-center text-sm text-gray-600">
-        © {new Date().getFullYear()} TeachMate. All rights reserved.
-      </footer>
     </div>
   );
 };
@@ -67,16 +54,18 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Wrap all routes in the Layout */}
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
           <Route path="login" element={<Login />} />
+          <Route path="nav" element={<Navbar />} />
+          <Route path="footer" element={<Footer />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="about" element={<About />} />
           <Route path="newchat" element={<NewChat />} />
           <Route path="yourmaterials" element={<YourMaterials />} />
           <Route path="yourstudent" element={<YourStudent />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="forgot" element={<Forgotpassword />} />
         </Route>
       </Routes>
     </Router>
