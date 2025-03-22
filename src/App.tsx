@@ -24,7 +24,7 @@ const Layout: React.FC = () => {
   return (
     <div className="max-h-screen flex flex-col">
       
-      {/* <header className="p-4 bg-gray-100 shadow">
+      <header className="p-4 bg-gray-100 shadow">
         <nav className="flex justify-center space-x-6">
           <Link to="/newchat" className="text-gray-700 hover:text-black">
             New Chat
@@ -39,7 +39,7 @@ const Layout: React.FC = () => {
             Settings
           </Link>
         </nav>
-      </header> */}
+      </header>
 
       {/* Main content is rendered here */}
       <main className="flex-1 p-4">

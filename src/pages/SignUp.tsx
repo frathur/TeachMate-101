@@ -13,7 +13,8 @@ export default function SignUp() {
   const [successMessage, setSuccessMessage] = useState("");
   const [passwordStrength, setPasswordStrength] = useState(0);
 
-  const calculatePasswordStrength = (pwd) => {
+  // Added type annotations for clarity
+  const calculatePasswordStrength = (pwd: string): number => {
     let strength = 0;
     if (pwd.length >= 8) strength += 1;
     if (/[A-Z]/.test(pwd)) strength += 1;
@@ -27,7 +28,7 @@ export default function SignUp() {
     setPasswordStrength(calculatePasswordStrength(password));
   }, [password, confirmPassword]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -56,13 +57,31 @@ export default function SignUp() {
         <h2 className="text-xl font-bold mb-6">Create an Account</h2>
         <form onSubmit={handleSubmit} className="w-80 space-y-4">
           <div className="flex space-x-2">
-            <input type="text" placeholder="First Name" className="w-1/2 p-3 border rounded" required />
-            <input type="text" placeholder="Surname" className="w-1/2 p-3 border rounded" required />
+            <input
+              type="text"
+              placeholder="First Name"
+              className="w-1/2 p-3 border rounded"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Surname"
+              className="w-1/2 p-3 border rounded"
+              required
+            />
           </div>
-          <input type="tel" placeholder="Mobile Number" className="w-full p-3 border rounded" required />
-          <input type="email" placeholder="Email" className="w-full p-3 border rounded" required />
-
-          {/* Password */}
+          <input
+            type="tel"
+            placeholder="Mobile Number"
+            className="w-full p-3 border rounded"
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full p-3 border rounded"
+            required
+          />
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -79,8 +98,6 @@ export default function SignUp() {
               {showPassword ? <IconEyeOff /> : <IconEye />}
             </span>
           </div>
-
-          {/* Confirm Password */}
           <div className="relative">
             <input
               type={showConfirmPassword ? "text" : "password"}
@@ -97,40 +114,42 @@ export default function SignUp() {
               {showConfirmPassword ? <IconEyeOff /> : <IconEye />}
             </span>
           </div>
-          {isError && <p className="text-red-500 text-sm">Passwords do not match!</p>}
-
+          {isError && (
+            <p className="text-red-500 text-sm">Passwords do not match!</p>
+          )}
           <button
             type="submit"
-            className="w-full bg-red-500 text-white py-3 rounded font-bold hover:bg-red-600"
+            className="w-full bg-red-500 text-white py-2 rounded font-bold hover:bg-red-600"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Signing up..." : "Sign Up"}
           </button>
         </form>
-        {successMessage && <p className="text-green-500 text-center mt-4">{successMessage}</p>}
-
+        {successMessage && (
+          <p className="text-green-500 text-center mt-4">{successMessage}</p>
+        )}
         <p className="mt-4 text-sm">
-          Already have an account? <Link to="/login" className="text-red-500 font-bold">Login</Link>
+          Already have an account?{" "}
+          <Link to="/login" className="text-red-500 font-bold">
+            Login
+          </Link>
         </p>
-
         <div className="flex items-center w-80 mt-6 mb-4">
           <div className="flex-1 h-px bg-gray-300" />
           <span className="mx-2 text-gray-500">or</span>
           <div className="flex-1 h-px bg-gray-300" />
         </div>
-
-        {/* Social Sign Up */}
         <div className="flex flex-col space-y-3 w-80">
-          <Link to="/oauth/google">
+          <Link to="/oauth/google" className="w-full">
             <button className="w-full flex items-center justify-center border rounded py-2 hover:bg-gray-100">
               <FaGoogle className="text-red-500 text-xl mr-2" />
-              Sign up with Google
+              <span className="font-semibold">Sign up with Google</span>
             </button>
           </Link>
-          <Link to="/oauth/facebook">
+          <Link to="/oauth/facebook" className="w-full">
             <button className="w-full flex items-center justify-center border rounded py-2 hover:bg-gray-100">
               <FaFacebook className="text-blue-600 text-xl mr-2" />
-              Sign up with Facebook
+              <span className="font-semibold">Sign up with Facebook</span>
             </button>
           </Link>
         </div>
