@@ -1,14 +1,13 @@
-// src/pages/NewChat.tsx
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  FaUserCircle,
   FaPaperPlane,
   FaUpload,
   FaCommentDots,
   FaFolderOpen,
   FaUserFriends,
   FaCog,
+  FaUserCircle,
 } from "react-icons/fa";
 
 type SidebarButtonProps = {
@@ -35,10 +34,6 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({
   </Link>
 );
 
-const NavButton: React.FC<{ label: string }> = ({ label }) => (
-  <button className="hover:text-black">{label}</button>
-);
-
 const NewChat: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [prompt, setPrompt] = useState<string>("");
@@ -56,14 +51,18 @@ const NewChat: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-white">
-      {/* LEFT SIDEBAR */}
-      <aside className="w-72 bg-[#FFECEC] rounded-r-[2rem] flex flex-col py-8 px-6">
+    <div className="min-h-screen flex bg-white relative">
+      {/* User Profile Icon at upper right */}
+      <div className="absolute top-4 right-4">
+        <FaUserCircle className="text-3xl text-gray-600 cursor-pointer" />
+      </div>
+
+      {/* LEFT SIDEBAR - hidden on small screens */}
+      <aside className="hidden md:block w-72 bg-[#FFECEC] rounded-r-[2rem] flex flex-col py-8 px-6">
         {/* Brand */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-black">TeachMate</h1>
         </div>
-
         {/* Nav Items */}
         <nav className="flex flex-col space-y-4">
           <SidebarButton
@@ -72,49 +71,32 @@ const NewChat: React.FC = () => {
             active
             to="/newchat"
           />
-          <SidebarButton
+          {/* <SidebarButton
             label="Your Materials"
             icon={<FaFolderOpen />}
             to="/yourmaterials"
-          />
-          <SidebarButton
+          /> */}
+          {/* <SidebarButton
             label="Your Students"
             icon={<FaUserFriends />}
             to="/yourstudent"
-          />
+          /> */}
           <SidebarButton label="Settings" icon={<FaCog />} to="/settings" />
         </nav>
       </aside>
 
       {/* RIGHT CONTENT AREA */}
       <div className="flex-1 flex flex-col">
-        {/* TOP NAV with centered links */}
-        <header className="flex items-center justify-between px-6 py-4 border-b">
-          {/* Left spacer */}
-          <div className="w-1/3 hidden md:flex"></div>
-          {/* Centered Nav Links */}
-          <nav className="flex-1 flex justify-center space-x-6 text-gray-700 font-semibold">
-            <NavButton label="About" />
-            <NavButton label="How it works" />
-            <NavButton label="Interface" />
-          </nav>
-          {/* Right: User Icon */}
-          <div className="w-1/3 flex justify-end">
-            <FaUserCircle className="text-2xl text-gray-600 cursor-pointer" />
-          </div>
-        </header>
-
         {/* MAIN CONTENT */}
         <main className="flex-1 px-6 py-6 flex flex-col items-center justify-center">
           {/* Heading */}
           <h2 className="text-2xl font-bold text-black mb-8">
             Your Assistant In Education
           </h2>
-
           {/* Prompt Input + Upload Button */}
           <div className="flex flex-col md:flex-row items-center gap-4">
             {/* Prompt Box with Red Border & Send Icon as Button */}
-            <div className="flex items-center border-2 border-red-500 rounded-full px-4 py-2 text-red-500 w-full max-w-md">
+            <div className="flex items-center border-2 border-red-500 rounded-full px-4 py-2 text-red-500 w-full max-w-lg">
               <input
                 type="text"
                 placeholder="Type prompt..."
@@ -126,7 +108,6 @@ const NewChat: React.FC = () => {
                 <FaPaperPlane className="cursor-pointer" />
               </button>
             </div>
-
             {/* Upload Button with Upload Icon */}
             <div>
               <input
@@ -148,7 +129,6 @@ const NewChat: React.FC = () => {
               </button>
             </div>
           </div>
-
           {/* Chips */}
           <div className="flex flex-wrap gap-3 mt-6">
             {[
