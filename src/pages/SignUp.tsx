@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/firebaseConfig"; // Ensure you import your Firebase instance
 
 export default function SignUp() {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -12,9 +15,12 @@ export default function SignUp() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [firebaseError, setFirebaseError] = useState("");
 
-  // Added type annotations for clarity
-  const calculatePasswordStrength = (pwd: string): number => {
+  const navigate = useNavigate();
+
+  // Function to calculate password strength
+  const calculatePasswordStrength = (pwd) => {
     let strength = 0;
     if (pwd.length >= 8) strength += 1;
     if (/[A-Z]/.test(pwd)) strength += 1;
@@ -28,21 +34,37 @@ export default function SignUp() {
     setPasswordStrength(calculatePasswordStrength(password));
   }, [password, confirmPassword]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setFirebaseError("");
+    setSuccessMessage("");
 
-    setTimeout(() => {
-      if (!isError && passwordStrength >= 3) {
-        setSuccessMessage("Account successfully created!");
-        setTimeout(() => {
-          setPassword("");
-          setConfirmPassword("");
-          setSuccessMessage("");
-        }, 2000);
-      }
+    if (isError) {
       setIsSubmitting(false);
-    }, 1000);
+      return;
+    }
+
+    if (passwordStrength < 3) {
+      setFirebaseError("Password is too weak. Use a stronger password.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("User Created:", userCredential.user);
+      setSuccessMessage("Account successfully created!");
+      
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+    } catch (error) {
+      console.error("Firebase Error:", error.message);
+      setFirebaseError(error.message);
+    }
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -57,29 +79,16 @@ export default function SignUp() {
         <h2 className="text-xl font-bold mb-6">Create an Account</h2>
         <form onSubmit={handleSubmit} className="w-80 space-y-4">
           <div className="flex space-x-2">
-            <input
-              type="text"
-              placeholder="First Name"
-              className="w-1/2 p-3 border rounded"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Surname"
-              className="w-1/2 p-3 border rounded"
-              required
-            />
+            <input type="text" placeholder="First Name" className="w-1/2 p-3 border rounded" required />
+            <input type="text" placeholder="Surname" className="w-1/2 p-3 border rounded" required />
           </div>
-          <input
-            type="tel"
-            placeholder="Mobile Number"
-            className="w-full p-3 border rounded"
-            required
-          />
+          <input type="tel" placeholder="Mobile Number" className="w-full p-3 border rounded" required />
           <input
             type="email"
             placeholder="Email"
             className="w-full p-3 border rounded"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <div className="relative">
@@ -91,10 +100,7 @@ export default function SignUp() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <span
-              className="absolute right-3 top-3 cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-            >
+            <span className="absolute right-3 top-3 cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <IconEyeOff /> : <IconEye />}
             </span>
           </div>
@@ -107,16 +113,12 @@ export default function SignUp() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
-            <span
-              className="absolute right-3 top-3 cursor-pointer"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            >
+            <span className="absolute right-3 top-3 cursor-pointer" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
               {showConfirmPassword ? <IconEyeOff /> : <IconEye />}
             </span>
           </div>
-          {isError && (
-            <p className="text-red-500 text-sm">Passwords do not match!</p>
-          )}
+          {isError && <p className="text-red-500 text-sm">Passwords do not match!</p>}
+          {firebaseError && <p className="text-red-500 text-sm">{firebaseError}</p>}
           <button
             type="submit"
             className="w-full bg-red-500 text-white py-2 rounded font-bold hover:bg-red-600"
@@ -125,9 +127,7 @@ export default function SignUp() {
             {isSubmitting ? "Signing up..." : "Sign Up"}
           </button>
         </form>
-        {successMessage && (
-          <p className="text-green-500 text-center mt-4">{successMessage}</p>
-        )}
+        {successMessage && <p className="text-green-500 text-center mt-4">{successMessage}</p>}
         <p className="mt-4 text-sm">
           Already have an account?{" "}
           <Link to="/login" className="text-red-500 font-bold">
