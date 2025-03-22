@@ -57,7 +57,7 @@ export default function SignUp() {
       setSuccessMessage("Account successfully created!");
       
       setTimeout(() => {
-        navigate("/dashboard");
+        navigate("/newChat");
       }, 1500);
     } catch (error) {
       console.error("Firebase Error:", error.message);

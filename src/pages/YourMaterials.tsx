@@ -153,7 +153,7 @@ const YourMaterials: React.FC = () => {
                 </div>
 
                 {/* YouTube */}
-                <div className="flex flex-col items-center">
+                {/* <div className="flex flex-col items-center">
                   <button
                     onClick={handleYouTubeClick}
                     className="w-14 h-14 bg-white rounded-full border flex items-center justify-center hover:bg-gray-100 transition"
@@ -161,7 +161,7 @@ const YourMaterials: React.FC = () => {
                     <FaYoutube className="text-xl text-red-500" />
                   </button>
                   <span className="text-sm text-gray-600 mt-1">YouTube</span>
-                </div>
+                </div> */}
 
                 {/* Create */}
                 <div className="flex flex-col items-center">

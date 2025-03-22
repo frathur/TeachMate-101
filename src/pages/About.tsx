@@ -1,8 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import heroImage from "../assets/Untitled1.png";
-import missionImage from "../assets/3907915.png"; // Add your mission image in assets
+// import missionImage from "../assets/3907915.png"; // Add your mission image in assets
 import visionImage from "../assets/6384624.jpg";   // Add your vision image in assets
+import mission from "../assets/mission1.jpg";
+import mission2 from "../assets/mission2.jpg";
 import { BsFiletypeSvg } from "react-icons/bs";
 import { GiArtificialHive } from "react-icons/gi";
 import { FaRegHandshake, FaTasks, FaCommentDots, FaFolderOpen, FaUserFriends, FaCog } from "react-icons/fa";
@@ -149,36 +151,25 @@ export default function About() {
         <div className="text-2xl font-bold text-black">TeachMate</div>
         <ul className="hidden md:flex space-x-8 text-gray-700 font-semibold">
           <li>
-            <Link to="/about#about" className="hover:text-black">
-              About
-            </Link>
+            <a href="#about" className="hover:text-black">About</a>
           </li>
           <li>
-            <Link to="/about#mission" className="hover:text-black">
-              Mission
-            </Link>
+            <a href="#mission" className="hover:text-black">Mission</a>
           </li>
           <li>
-            <Link to="/about#vision" className="hover:text-black">
-              Vision
-            </Link>
+            <a href="#vision" className="hover:text-black">Vision</a>
           </li>
           <li>
-            <Link to="/about#features" className="hover:text-black">
-              Features
-            </Link>
+            <a href="#features" className="hover:text-black">Features</a>
           </li>
           <li>
-            <Link to="/about#steps" className="hover:text-black">
-              Steps
-            </Link>
+            <a href="#steps" className="hover:text-black">Steps</a>
           </li>
           <li>
-            <Link to="/about#team" className="hover:text-black">
-              Team
-            </Link>
+            <a href="#team" className="hover:text-black">Team</a>
           </li>
         </ul>
+
         <div className="flex space-x-4">
           <Link to="/login" className="border border-black text-black px-4 py-2 rounded hover:bg-black hover:text-white transition">
             Log in
@@ -192,7 +183,7 @@ export default function About() {
       {/* Main Content */}
       <main className="flex-1">
         {/* Hero Section */}
-        <section id="about" className="min-h-screen flex flex-col md:flex-row justify-center items-center px-8 py-10">
+        <section id="about" className="min-h-screen flex flex-col md:flex-row justify-center items-center px-8 py-10 ">
           <div className="md:w-1/2 flex justify-center">
             <img src={heroImage} alt="Illustration" className="max-w-md rounded-lg shadow-lg" />
           </div>
@@ -216,7 +207,11 @@ export default function About() {
             <p className="text-xl text-gray-700 mb-8">
               Our mission is to empower educators by providing cutting-edge AI tools that simplify administrative tasks, enhance teaching, and foster personalized learning.
             </p>
-            <img src={missionImage} alt="Our Mission" className="mx-auto max-w-md rounded-lg shadow-lg" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+              <img src={mission} alt="Our Mission" className="mx-auto max-w-md rounded-lg shadow-lg" />
+              <img src={mission2} alt="Our Mission" className="mx-auto max-w-md rounded-lg shadow-lg" />
+            </div>
+
           </div>
         </section>
 
@@ -353,18 +348,18 @@ export default function About() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {/* Team Member Card */}
             <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center transition transform hover:scale-105 hover:shadow-xl">
-              <div className="w-24 h-24 bg-gray-300 rounded-full mb-4"></div>
-              <h3 className="text-xl font-bold text-gray-800">Alex Johnson</h3>
+              <div className="w-24 h-24 bg-gray-300 rounded-full mb-4"><img src="" alt="" /></div>
+              <h3 className="text-xl font-bold text-gray-800">Arthur Frank Annor</h3>
               <p className="text-gray-600">CEO & Founder</p>
             </div>
             <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center transition transform hover:scale-105 hover:shadow-xl">
-              <div className="w-24 h-24 bg-gray-300 rounded-full mb-4"></div>
-              <h3 className="text-xl font-bold text-gray-800">Maria Rodriguez</h3>
+              <div className="w-24 h-24 bg-gray-300 rounded-full mb-4"><img src={mission} alt="" className="w-24 h-24 bg-gray-300 rounded-full mb-4" /></div>
+              <h3 className="text-xl font-bold text-gray-800">Jephthah Duah</h3>
               <p className="text-gray-600">Chief Technology Officer</p>
             </div>
             <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center transition transform hover:scale-105 hover:shadow-xl">
-              <div className="w-24 h-24 bg-gray-300 rounded-full mb-4"></div>
-              <h3 className="text-xl font-bold text-gray-800">Samuel Lee</h3>
+              <div className="w-24 h-24 bg-gray-300 rounded-full mb-4"><img src="" alt="" /></div>
+              <h3 className="text-xl font-bold text-gray-800">Kelvin Osei Kuffour</h3>
               <p className="text-gray-600">Head of Product</p>
             </div>
           </div>

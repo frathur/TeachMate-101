@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { auth } from "../firebase/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import Forgotpassword from "./Forgotpassword";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
