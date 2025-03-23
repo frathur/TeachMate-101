@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FaUserCircle,
@@ -8,6 +8,7 @@ import {
   FaCog,
   FaUserPlus,
   FaUserGraduate,
+  FaBars,
 } from "react-icons/fa";
 
 type SidebarButtonProps = {
@@ -17,7 +18,12 @@ type SidebarButtonProps = {
   to: string;
 };
 
-const SidebarButton: React.FC<SidebarButtonProps> = ({ label, icon, active, to }) => (
+const SidebarButton: React.FC<SidebarButtonProps> = ({
+  label,
+  icon,
+  active,
+  to,
+}) => (
   <Link
     to={to}
     className={`flex items-center gap-3 px-4 py-2 rounded transition ${
@@ -29,47 +35,55 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({ label, icon, active, to }
   </Link>
 );
 
-const NavButton: React.FC<{ label: string }> = ({ label }) => (
-  <button className="hover:text-black">{label}</button>
-);
-
 const YourStudents: React.FC = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="min-h-screen flex bg-white">
+    <div className="min-h-screen flex bg-white relative">
+      {/* Hamburger Icon for Mobile */}
+      <div className="absolute top-4 left-4 md:hidden">
+        <button onClick={() => setSidebarOpen(!sidebarOpen)}>
+          <FaBars className="text-2xl text-gray-600" />
+        </button>
+      </div>
+
+      {/* User Profile Icon */}
+      <div className="absolute top-4 right-4">
+        <FaUserCircle className="text-3xl text-gray-600 cursor-pointer" />
+      </div>
+
       {/* LEFT SIDEBAR */}
-      <aside className="w-72 bg-[#FFECEC] rounded-r-[2rem] flex flex-col py-8 px-6">
-        {/* Brand */}
+      <aside
+        className={`${
+          sidebarOpen ? "block" : "hidden"
+        } md:block w-72 bg-[#FFECEC] rounded-r-[2rem] flex flex-col py-8 px-6 absolute md:static top-0 left-0 h-full md:h-auto z-50`}
+      >
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-black">TeachMate</h1>
         </div>
-
-        {/* Nav Items */}
         <nav className="flex flex-col space-y-4">
-          <SidebarButton label="New chat" icon={<FaCommentDots />} to="/newchat" />
-          <SidebarButton label="Your materials" icon={<FaFolderOpen />} to="/yourmaterials" />
-          <SidebarButton label="Your Students" icon={<FaUserFriends />} active to="/yourstudent" />
+          <SidebarButton
+            label="New chat"
+            icon={<FaCommentDots />}
+            to="/newchat"
+          />
+          <SidebarButton
+            label="Your materials"
+            icon={<FaFolderOpen />}
+            to="/yourmaterials"
+          />
+          <SidebarButton
+            label="Your Students"
+            icon={<FaUserFriends />}
+            to="/yourstudent"
+            active
+          />
           <SidebarButton label="Settings" icon={<FaCog />} to="/settings" />
         </nav>
       </aside>
 
       {/* RIGHT CONTENT AREA */}
       <div className="flex-1 flex flex-col">
-        {/* TOP NAV with centered links */}
-        <header className="flex items-center justify-between px-6 py-4 border-b">
-          {/* Left spacer */}
-          <div className="w-1/3 hidden md:flex"></div>
-          {/* Centered Nav Links */}
-          <nav className="flex-1 flex justify-center space-x-6 text-gray-700 font-semibold">
-            <NavButton label="About" />
-            <NavButton label="How it works" />
-            <NavButton label="Interface" />
-          </nav>
-          {/* Right: User Icon */}
-          <div className="w-1/3 flex justify-end">
-            <FaUserCircle className="text-2xl text-gray-600 cursor-pointer" />
-          </div>
-        </header>
-
         {/* MAIN CONTENT */}
         <main className="flex-1 p-6 flex flex-col items-center gap-6">
           {/* Teachers Card */}
@@ -89,7 +103,7 @@ const YourStudents: React.FC = () => {
           {/* Students Card */}
           <div className="w-full max-w-3xl bg-gray-50 rounded-md shadow p-6 flex flex-col gap-4">
             <h2 className="text-xl font-bold text-black">Students</h2>
-            {/* Placeholder illustration */}
+            {/* Placeholder illustration for Students */} 
             <div className="w-full bg-white rounded-md h-48 flex items-center justify-center">
               <img
                 src="https://via.placeholder.com/300x150?text=Students+Illustration"

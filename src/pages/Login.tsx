@@ -78,13 +78,13 @@ export default function Login() {
 
             {/* Forgot Password */}
             <div className="text-right text-sm mb-4 text-black cursor-pointer">
-              <Link to="/Forgotpassword">Forgot password?</Link>
+              <Link to="/forgotpassword">Forgot password?</Link>
             </div>
 
             {/* Login Button */}
-            <button
+            <button style={{cursor: "pointer"}}
               type="submit"
-              className="w-full bg-red-500 text-white py-3 rounded font-bold hover:bg-red-600 mb-4"
+              className="w-full bg-red-500 text-white py-3 rounded font-bold hover:bg-red-600 mb-4 cursor:pointer"
             >
               Continue
             </button>

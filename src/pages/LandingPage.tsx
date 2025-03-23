@@ -10,7 +10,7 @@ export default function LandingPage() {
         <div className="text-2xl font-bold text-black">TeachMate</div>
 
         {/* Middle: Nav Links (removed Interface) */}
-        <ul className="hidden md:flex space-x-8 text-gray-700 font-semibold">
+        {/* <ul className="hidden md:flex space-x-8 text-gray-700 font-semibold">
           <li>
             <Link to="/about" className="hover:text-black">
               About
@@ -21,7 +21,7 @@ export default function LandingPage() {
               How it works
             </Link>
           </li>
-        </ul>
+        </ul> */}
 
         {/* Right: Log in & Try free */}
         <div className="flex space-x-4">

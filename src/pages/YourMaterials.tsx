@@ -1,4 +1,3 @@
-// src/pages/YourMaterials.tsx
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -8,10 +7,10 @@ import {
   FaUserFriends,
   FaCog,
   FaGoogleDrive,
-  FaYoutube,
   FaPen,
   FaUpload,
   FaLink,
+  FaBars, // Hamburger icon
 } from "react-icons/fa";
 
 type SidebarButtonProps = {
@@ -21,7 +20,12 @@ type SidebarButtonProps = {
   to: string;
 };
 
-const SidebarButton: React.FC<SidebarButtonProps> = ({ label, icon, active, to }) => (
+const SidebarButton: React.FC<SidebarButtonProps> = ({
+  label,
+  icon,
+  active,
+  to,
+}) => (
   <Link
     to={to}
     className={`flex items-center gap-3 px-4 py-2 rounded transition ${
@@ -31,10 +35,6 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({ label, icon, active, to }
     {icon}
     <span>{label}</span>
   </Link>
-);
-
-const NavButton: React.FC<{ label: string }> = ({ label }) => (
-  <button className="hover:text-black">{label}</button>
 );
 
 const YourMaterials: React.FC = () => {
@@ -69,43 +69,51 @@ const YourMaterials: React.FC = () => {
     console.log("Link button clicked");
   };
 
+  // State to track sidebar open/closed
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="min-h-screen flex bg-white">
+    <div className="min-h-screen flex bg-white relative">
+      {/* Hamburger Icon (visible on small screens) */}
+      <div className="absolute top-4 left-4 md:hidden">
+        <button onClick={() => setSidebarOpen(!sidebarOpen)}>
+          <FaBars className="text-2xl text-gray-600" />
+        </button>
+      </div>
+
+      {/* User Profile Icon */}
+      <div className="absolute top-4 right-4">
+        <FaUserCircle className="text-3xl text-gray-600 cursor-pointer" />
+      </div>
+
       {/* LEFT SIDEBAR */}
-      <aside className="w-72 bg-[#FFECEC] rounded-r-[2rem] flex flex-col py-8 px-6">
-        {/* Brand */}
+      <aside
+        className={`${
+          sidebarOpen ? "block" : "hidden"
+        } md:block w-72 bg-[#FFECEC] rounded-r-[2rem] flex flex-col py-8 px-6 absolute md:static top-0 left-0 h-full md:h-auto z-50`}
+      >
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-black">TeachMate</h1>
         </div>
-
-        {/* Nav Items */}
         <nav className="flex flex-col space-y-4">
           <SidebarButton label="New chat" icon={<FaCommentDots />} to="/newchat" />
-          <SidebarButton label="Your materials" icon={<FaFolderOpen />} active to="/yourmaterials" />
-          <SidebarButton label="Your Students" icon={<FaUserFriends />} to="/yourstudent" />
+          <SidebarButton
+            label="Your materials"
+            icon={<FaFolderOpen />}
+            active
+            to="/yourmaterials"
+          />
+          <SidebarButton
+            label="Your Students"
+            icon={<FaUserFriends />}
+            to="/yourstudent"
+          />
           <SidebarButton label="Settings" icon={<FaCog />} to="/settings" />
         </nav>
       </aside>
 
       {/* RIGHT CONTENT AREA */}
       <div className="flex-1 flex flex-col">
-        {/* TOP NAV with centered links */}
-        <header className="flex items-center justify-between px-6 py-4 border-b">
-          {/* Left spacer */}
-          <div className="w-1/3 hidden md:flex"></div>
-          {/* Centered Nav Links */}
-          <nav className="flex-1 flex justify-center space-x-6 text-gray-700 font-semibold">
-            <NavButton label="About" />
-            <NavButton label="How it works" />
-            <NavButton label="Interface" />
-          </nav>
-          {/* Right: User Icon */}
-          <div className="w-1/3 flex justify-end">
-            <FaUserCircle className="text-2xl text-gray-600 cursor-pointer" />
-          </div>
-        </header>
-
-        {/* MAIN CONTENT */}
         <main className="flex-1 p-6 flex flex-col items-center justify-center">
           <div className="w-full max-w-3xl bg-gray-50 rounded-md shadow p-6">
             {/* Title Field */}
@@ -151,17 +159,6 @@ const YourMaterials: React.FC = () => {
                   </button>
                   <span className="text-sm text-gray-600 mt-1">Drive</span>
                 </div>
-
-                {/* YouTube */}
-                {/* <div className="flex flex-col items-center">
-                  <button
-                    onClick={handleYouTubeClick}
-                    className="w-14 h-14 bg-white rounded-full border flex items-center justify-center hover:bg-gray-100 transition"
-                  >
-                    <FaYoutube className="text-xl text-red-500" />
-                  </button>
-                  <span className="text-sm text-gray-600 mt-1">YouTube</span>
-                </div> */}
 
                 {/* Create */}
                 <div className="flex flex-col items-center">
