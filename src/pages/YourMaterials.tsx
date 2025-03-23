@@ -1,210 +1,224 @@
-import React, { useRef, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import {
+import { 
+  FaTrash, 
   FaUserCircle,
   FaCommentDots,
   FaFolderOpen,
   FaUserFriends,
   FaCog,
-  FaGoogleDrive,
-  FaPen,
-  FaUpload,
-  FaLink,
-  FaBars, // Hamburger icon
+  FaUserPlus,
+  FaUserGraduate, 
 } from "react-icons/fa";
 
-type SidebarButtonProps = {
-  label: string;
-  icon: React.ReactElement;
-  active?: boolean;
-  to: string;
-};
+const YourStudents: React.FC = () => {
+  const [teachers, setTeachers] = useState<{ name: string; email: string }[]>([]);
+  const [students, setStudents] = useState<{ name: string; reference: string; index: string }[]>([]);
+  const [teacherName, setTeacherName] = useState('');
+  const [teacherEmail, setTeacherEmail] = useState('');
+  const [studentName, setStudentName] = useState('');
+  const [studentReference, setStudentReference] = useState('');
+  const [studentIndex, setStudentIndex] = useState('');
+  const [showTeacherForm, setShowTeacherForm] = useState(false);
+  const [showStudentForm, setShowStudentForm] = useState(false);
 
-const SidebarButton: React.FC<SidebarButtonProps> = ({
-  label,
-  icon,
-  active,
-  to,
-}) => (
-  <Link
-    to={to}
-    className={`flex items-center gap-3 px-4 py-2 rounded transition ${
-      active ? "bg-red-500 text-white" : "text-gray-800 hover:bg-red-100"
-    }`}
-  >
-    {icon}
-    <span>{label}</span>
-  </Link>
-);
-
-const YourMaterials: React.FC = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-
-  // Hidden file input for Upload
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
+  type SidebarButtonProps = {
+    label: string;
+    icon: React.ReactElement;
+    active?: boolean;
+    to: string;
   };
+  const SidebarButton: React.FC<SidebarButtonProps> = ({ label, icon, active, to }) => (
+    <Link
+      to={to}
+      className={`flex items-center gap-3 px-4 py-2 rounded transition ${
+        active ? "bg-red-500 text-white" : "text-gray-800 hover:bg-red-100"
+      }`}
+    >
+      {icon}
+      <span>{label}</span>
+    </Link>
+  );
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      console.log("Selected file:", e.target.files[0].name);
-      // Implement further upload logic here
+  const NavButton: React.FC<{ label: string }> = ({ label }) => (
+    <button className="hover:text-black">{label}</button>
+  );
+  
+
+  // Load history from localStorage on mount
+  useEffect(() => {
+    const storedTeachers = localStorage.getItem("teachers");
+    const storedStudents = localStorage.getItem("students");
+
+    if (storedTeachers) setTeachers(JSON.parse(storedTeachers));
+    if (storedStudents) setStudents(JSON.parse(storedStudents));
+  }, []);
+
+  // Save history to localStorage when updated
+  useEffect(() => {
+    localStorage.setItem("teachers", JSON.stringify(teachers));
+    localStorage.setItem("students", JSON.stringify(students));
+  }, [teachers, students]);
+
+  const handleInviteTeacher = () => {
+    if (teacherName && teacherEmail) {
+      setTeachers([...teachers, { name: teacherName, email: teacherEmail }]);
+      setTeacherName('');
+      setTeacherEmail('');
+      setShowTeacherForm(false); // Hide form after adding
+      
+// Open Gmail with pre-filled recipient and message
+    const subject = encodeURIComponent("Invitation to TeachMate");
+    const body = encodeURIComponent(`Hello,\n\nYou have been invited to join TeachMate as a teacher.\n\nBest regards,\nTeachMate Team`);
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${teacherEmail}&su=${subject}&body=${body}`, '_blank');
     }
   };
 
-  // Placeholder handlers for each icon
-  const handleDriveClick = () => {
-    console.log("Drive button clicked");
-  };
-  const handleYouTubeClick = () => {
-    console.log("YouTube button clicked");
-  };
-  const handleCreateClick = () => {
-    console.log("Create button clicked");
-  };
-  const handleLinkClick = () => {
-    console.log("Link button clicked");
+  const handleAddStudent = () => {
+    if (studentName && studentReference && studentIndex) {
+      setStudents([...students, { name: studentName, reference: studentReference, index: studentIndex }]);
+      setStudentName('');
+      setStudentReference('');
+      setStudentIndex('');
+      setShowStudentForm(false); // Hide form after adding
+    }
   };
 
-  // State to track sidebar open/closed
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  // Clear history
+  const clearHistory = () => {
+    localStorage.removeItem("teachers");
+    localStorage.removeItem("students");
+    setTeachers([]);
+    setStudents([]);
+  };
 
   return (
-    <div className="min-h-screen flex bg-white relative">
-      {/* Hamburger Icon (visible on small screens) */}
-      <div className="absolute top-4 left-4 md:hidden">
-        <button onClick={() => setSidebarOpen(!sidebarOpen)}>
-          <FaBars className="text-2xl text-gray-600" />
-        </button>
-      </div>
-
-      {/* User Profile Icon */}
-      <div className="absolute top-4 right-4">
-        <FaUserCircle className="text-3xl text-gray-600 cursor-pointer" />
-      </div>
-
+    <div className="min-h-screen flex bg-white">
       {/* LEFT SIDEBAR */}
-      <aside
-        className={`${
-          sidebarOpen ? "block" : "hidden"
-        } md:block w-72 bg-[#FFECEC] rounded-r-[2rem] flex flex-col py-8 px-6 absolute md:static top-0 left-0 h-full md:h-auto z-50`}
-      >
+      <aside className="w-72 bg-[#FFECEC] rounded-r-[2rem] flex flex-col py-8 px-6">
+        {/* Brand */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-black">TeachMate</h1>
         </div>
+      
+
+        {/* Nav Items */}
         <nav className="flex flex-col space-y-4">
           <SidebarButton label="New chat" icon={<FaCommentDots />} to="/newchat" />
-          <SidebarButton
-            label="Your materials"
-            icon={<FaFolderOpen />}
-            active
-            to="/yourmaterials"
-          />
-          <SidebarButton
-            label="Your Students"
-            icon={<FaUserFriends />}
-            to="/yourstudent"
-          />
+          <SidebarButton label="Your materials" icon={<FaFolderOpen />} to="/yourmaterials" />
+          <SidebarButton label="Your Students" icon={<FaUserFriends />} active to="/yourstudent" />
           <SidebarButton label="Settings" icon={<FaCog />} to="/settings" />
         </nav>
       </aside>
+      
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6 ">Your Students & Teachers</h1>
 
-      {/* RIGHT CONTENT AREA */}
-      <div className="flex-1 flex flex-col">
-        <main className="flex-1 p-6 flex flex-col items-center justify-center">
-          <div className="w-full max-w-3xl bg-gray-50 rounded-md shadow p-6">
-            {/* Title Field */}
-            <div className="mb-6">
-              <label className="block text-md font-semibold text-gray-800 mb-2">
-                Title
-              </label>
-              <input
-                type="text"
-                placeholder="Enter title here"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full h-12 px-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
-              />
-            </div>
+      {/* Teacher Section */}
+      <div className="bg-gray-100 p-6 rounded mb-6">
+        <h2 className="text-2xl font-semibold mb-4">Teachers</h2>
 
-            {/* Description Field */}
-            <div className="mb-6">
-              <label className="block text-md font-semibold text-gray-800 mb-2">
-                Description (Optional)
-              </label>
-              <textarea
-                placeholder="Enter description here"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full h-24 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-400 resize-none"
-              />
-            </div>
+        {/* Toggle Teacher Form */}
+        <button
+          onClick={() => setShowTeacherForm(!showTeacherForm)}
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 flex items-center gap-2 mb-4"
+        >
+          <FaUserPlus /> {showTeacherForm ? "Cancel" : "Add Teacher"}
+        </button>
 
-            {/* Attach Section */}
-            <div>
-              <label className="block text-md font-semibold text-gray-800 mb-2">
-                Attach
-              </label>
-              <div className="flex flex-wrap justify-center items-center space-x-6">
-                {/* Drive */}
-                <div className="flex flex-col items-center">
-                  <button
-                    onClick={handleDriveClick}
-                    className="w-14 h-14 bg-white rounded-full border flex items-center justify-center hover:bg-gray-100 transition"
-                  >
-                    <FaGoogleDrive className="text-xl text-blue-600" />
-                  </button>
-                  <span className="text-sm text-gray-600 mt-1">Drive</span>
-                </div>
-
-                {/* Create */}
-                <div className="flex flex-col items-center">
-                  <button
-                    onClick={handleCreateClick}
-                    className="w-14 h-14 bg-white rounded-full border flex items-center justify-center hover:bg-gray-100 transition"
-                  >
-                    <FaPen className="text-xl text-gray-700" />
-                  </button>
-                  <span className="text-sm text-gray-600 mt-1">Create</span>
-                </div>
-
-                {/* Upload with Hidden File Input */}
-                <div className="flex flex-col items-center">
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                  <button
-                    onClick={handleUploadClick}
-                    className="w-14 h-14 bg-white rounded-full border flex items-center justify-center hover:bg-gray-100 transition"
-                  >
-                    <FaUpload className="text-xl text-gray-700" />
-                  </button>
-                  <span className="text-sm text-gray-600 mt-1">Upload</span>
-                </div>
-
-                {/* Link */}
-                <div className="flex flex-col items-center">
-                  <button
-                    onClick={handleLinkClick}
-                    className="w-14 h-14 bg-white rounded-full border flex items-center justify-center hover:bg-gray-100 transition"
-                  >
-                    <FaLink className="text-xl text-gray-700" />
-                  </button>
-                  <span className="text-sm text-gray-600 mt-1">Link</span>
-                </div>
-              </div>
-            </div>
+        {showTeacherForm && (
+          <div className="flex flex-col sm:flex-row gap-4">
+            <input
+              type="text"
+              placeholder="Name"
+              value={teacherName}
+              onChange={(e) => setTeacherName(e.target.value)}
+              className="w-full sm:w-1/3 p-3 border rounded-lg text-lg"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={teacherEmail}
+              onChange={(e) => setTeacherEmail(e.target.value)}
+              className="w-full sm:w-1/3 p-3 border rounded-lg text-lg"
+            />
+            <button
+              onClick={handleInviteTeacher}
+              className="w-full sm:w-auto bg-green-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-green-700"
+            >
+              Invite
+            </button>
           </div>
-        </main>
+        )}
+
+        <ul className="mt-4">
+          {teachers.map((teacher, index) => (
+            <li key={index} className="text-lg">{teacher.name} ({teacher.email})</li>
+          ))}
+        </ul>
       </div>
+
+      {/* Student Section */}
+      <div className="bg-gray-100 p-6 rounded mb-6">
+        <h2 className="text-2xl font-semibold mb-4">Students</h2>
+
+        {/* Toggle Student Form */}
+        <button
+          onClick={() => setShowStudentForm(!showStudentForm)}
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 flex items-center gap-2 mb-4"
+        >
+          <FaUserGraduate /> {showStudentForm ? "Cancel" : "Add Student"}
+        </button>
+
+        {showStudentForm && (
+          <div className="flex flex-col sm:flex-row gap-4">
+            <input
+              type="text"
+              placeholder="Name"
+              value={studentName}
+              onChange={(e) => setStudentName(e.target.value)}
+              className="w-full sm:w-1/4 p-3 border rounded-lg text-lg"
+            />
+            <input
+              type="text"
+              placeholder="Reference"
+              value={studentReference}
+              onChange={(e) => setStudentReference(e.target.value)}
+              className="w-full sm:w-1/4 p-3 border rounded-lg text-lg"
+            />
+            <input
+              type="text"
+              placeholder="Index"
+              value={studentIndex}
+              onChange={(e) => setStudentIndex(e.target.value)}
+              className="w-full sm:w-1/4 p-3 border rounded-lg text-lg"
+            />
+            <button
+              onClick={handleAddStudent}
+              className="w-full sm:w-auto bg-green-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-green-700"
+            >
+              Add
+            </button>
+          </div>
+        )}
+
+        <ul className="mt-4">
+          {students.map((student, index) => (
+            <li key={index} className="text-lg">{student.name} ({student.reference}, {student.index})</li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Clear History Button */}
+      <button
+        onClick={clearHistory}
+        className="w-full sm:w-auto bg-red-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-red-700 flex items-center gap-2"
+      >
+        <FaTrash /> Clear History
+      </button>
+    </div>
     </div>
   );
 };
 
-export default YourMaterials;
+export default YourStudents;
